@@ -60,7 +60,7 @@ namespace Bricks.Repositories
 
     public object Delete(int id)
     {
-      string query = "DELETE FROM flowers WHERE id = @Id"
+      string query = "DELETE FROM flowers WHERE id = @Id";
       int changedRows = _db.Execute(query, new { id });
       if (changedRows < 1) throw new Exception("Invalid Id");
       return "Successfully deleted brick";
