@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bricks.Models;
+using Bricks.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bricks.Controllers
@@ -10,36 +12,91 @@ namespace Bricks.Controllers
   [ApiController]
   public class BSetsController : ControllerBase
   {
+    private readonly BSetsRepository _repo;
+
+    public BSetsController(BSetsRepository repo)
+    {
+      _repo = repo;
+    }
+
     // GET api/values
     [HttpGet]
-    public ActionResult<IEnumerable<string>> Get()
+    public ActionResult<IEnumerable<BSet>> Get()
     {
-      return new string[] { "value1", "value2" };
+      try
+      {
+        return Ok(_repo.GetAll());
+      }
+      catch (Exception e)
+      {
+
+        return BadRequest(e);
+      }
     }
 
     // GET api/values/5
     [HttpGet("{id}")]
-    public ActionResult<string> Get(int id)
+    public ActionResult<BSet> Get(int id)
     {
-      return "value";
+      try
+      {
+        return Ok(_repo.GetById(id));
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e);
+
+      }
     }
 
     // POST api/values
     [HttpPost]
-    public void Post([FromBody] string value)
+    public ActionResult<BSet> Post([FromBody] BSet value)
     {
+      try
+      {
+        return Ok(_repo.Create(value));
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e);
+
+      }
     }
 
     // PUT api/values/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public ActionResult<BSet> Put(int id, [FromBody] BSet value)
     {
+
+      try
+      {
+        value.Id = id;
+        return Ok(_repo.Update(value));
+
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e);
+
+      }
+
     }
 
     // DELETE api/values/5
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public ActionResult<BSet> Delete(int id)
     {
+      try
+      {
+        return Ok(_repo.Delete(id));
+
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e);
+
+      }
     }
   }
 }

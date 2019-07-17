@@ -1,5 +1,7 @@
 
+using System;
 using System.Data;
+using Bricks.Models;
 
 namespace Bricks.Repositories
 {
@@ -12,8 +14,30 @@ namespace Bricks.Repositories
       _db = db;
     }
 
+    internal object GetAll()
+    {
+      throw new NotImplementedException();
+    }
 
+    internal object GetById(int id)
+    {
+      throw new NotImplementedException();
+    }
 
+    internal object Create(BSet value)
+    {
+      throw new NotImplementedException();
+    }
+
+    internal object Update(BSet value)
+    {
+      throw new NotImplementedException();
+    }
+
+    internal object Delete(int id)
+    {
+      throw new NotImplementedException();
+    }
   }
 
 
