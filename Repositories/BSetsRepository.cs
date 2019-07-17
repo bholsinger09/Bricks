@@ -1,7 +1,9 @@
 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using Bricks.Models;
+using Dapper;
 
 namespace Bricks.Repositories
 {
@@ -14,29 +16,52 @@ namespace Bricks.Repositories
       _db = db;
     }
 
-    internal object GetAll()
+    public IEnumerable<BSet> GetAll()
     {
-      throw new NotImplementedException();
+      return _db.Query<BSet>("SELECT * FROM bsets");
+
     }
 
-    internal object GetById(int id)
+    public BSet GetById(int id)
     {
-      throw new NotImplementedException();
+      string query = "SELECT * FROM bsets WHERE id = @id";
+      BSet bset = _db.QueryFirstOrDefault<BSet>(query, new { id });
+      if (bset is null) throw new Exception("Invalid Id");
+      return bset;
+
+
     }
 
-    internal object Create(BSet value)
+    public BSet Create(BSet value)
     {
-      throw new NotImplementedException();
+      string query = @"
+     INSERT INTO bsets (title, descr)
+          VALUES(@Title, @Description)";
+      int id = _db.ExecuteScalar<int>(query, value);
+      value.Id = id;
+      return value;
     }
 
-    internal object Update(BSet value)
+    public BSet Update(BSet value)
     {
-      throw new NotImplementedException();
+      string query = @"
+      UPDATE bset
+      SET   
+         title = @Title
+      WHERE id = @Id;
+
+      SELECT * FROM bsets WHERE id = @Id";
+      return _db.QueryFirstOrDefault<BSet>(query, value);
+
     }
 
-    internal object Delete(int id)
+    public string Delete(int id)
     {
-      throw new NotImplementedException();
+      string query = "DELETE FROM bsets WHERE id = @Id";
+      int changedRows = _db.Execute(query, new { id });
+      if (changedRows != 1) throw new Exception("Invalid Id ");
+      return "Successfully deleted the set";
+
     }
   }
 
